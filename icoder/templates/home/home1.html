@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock title %}
+{% block homeactive %}active{% endblock homeactive %}
+{% block body %}
+
+<div class="container">
+  <div class="my-3 mb-4 bg-light rounded-3 jumbotron">
+    <div style="background-color: #E9ECEF">
+      <div class="container p-3">
+        {% if user.is_authenticated %}
+        <h1 class="display-5 fw-bold">Welcome <span class="text-primary">{{request.user}} </span>  -  iCoder</h1>
+
+        {% else %}
+        <h1 class="display-5 fw-bold">Welcome to -  iCoder</h1>
+        {% endif %}
+        <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in
+          previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your
+          liking.</p>
+        <hr>
+        <p class='fs-6'>It uses utility for typograpghy and spacing to space content out within the seconds</p>
+        <a href='/blog/' class="btn btn-primary btn-lg" type="button">Go to Blog</a>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="container">
+  <h2>Popular Blogpost</h2>
+  <div class="row mb-2 my-4">
+    {% for i in a %}
+    <div class="row mb-2 my-2 shadow-lg">
+      <div class="col-md-12">
+        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+          <div class="col-6 d-flex d-md-block d-none align-self-center">
+  
+            <img class="bd-placeholder-img" width="55%" height="40%" src='{{i.image2.url}}'>
+  
+          </div>
+          <div class="col-12 d-md-none d-block d-flex align-self-center justify-content-center">
+  
+            <img class="bd-placeholder-img" width="100%" height="95%" src='{{i.image2.url}}'>
+          </div>
+          <div
+            class="col-sm-6 col-12 text-center text-sm-start p-4 jusify-content-end d-flex flex-column position-static">
+            <strong class="d-inline-block mb-2 text-primary">Article By {{i.author}} <span><i><u
+                    class="text-success">{{i.views}} views</u></i></span></strong>
+            <h3 class="mb-0 text-success">{{i.title}} </h3>
+            <div class="mb-1 text-muted">{{i.timestamp}}</div>
+            <p class="card-text mt-2 mb-auto">
+            <div class="preview">{{i.content|safe|truncatechars:198}}...</div>
+            </p>
+            <div class="d-flex justify-content-sm-start justify-content-around">
+              <a href="/blog/contin/{{i.sno}}/" role='button' class="btn btn-sm-sm btn-primary">Continue Reading</a>
+              <div class="fb-like " data-href="http://127.0.0.1:8000/{{i.sno}}" data-width="" data-layout="button_count"
+                data-action="like" data-size="large" data-share="true"></div>
+              <button class="btn btn-success" onclick="share()">Share</button>
+              <script>
+  
+                function share() {
+                  // var link = "https://meshv-p.github.io/Notes";
+                  // console.log(link);
+                  if (navigator.share) {
+                    navigator.share({
+                      title: 'meshv patel', url: 'https://meshv-p.github.io/Notes'
+                    })
+  
+                  }
+                }
+              </script>
+            </div>
+          </div>
+  
+        </div>
+      </div>
+  
+    </div>
+    {% endfor %}
+    
+  </div>
+</div>
+
+
+
+{% endblock body %}

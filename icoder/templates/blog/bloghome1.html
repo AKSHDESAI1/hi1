@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %} Blog {% endblock title %}
+{% block js %}
+<script>
+  let pre = document.getElementsByClassName('preview');
+  Array.from(pre).forEach(element => {
+    element.innerHTML = element.innerText
+  });
+</script>
+{% endblock js %}
+{% block blogactive %}active{% endblock blogactive %}
+{% block body %}
+<div class="container">
+  <h2 class='mb-3'>Coding Articles By iCoder</h2>
+  {% for i in allposts1|slice:'::-1' %}
+  <div class="row mb-2 my-2 shadow-lg">
+    <div class="col-md-12">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col-6 d-flex d-md-block d-none align-self-center">
+
+          <img class="bd-placeholder-img" width="55%" height="40%" src='{{i.image2.url}}'>
+
+        </div>
+        <div class="col-12 d-md-none d-block d-flex align-self-center justify-content-center">
+
+          <img class="bd-placeholder-img" width="100%" height="95%" src='{{i.image2.url}}'>
+        </div>
+        <div
+          class="col-sm-6 col-12 text-center text-sm-start p-4 jusify-content-end d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-primary">Article By {{i.author}} <span><i><u
+                  class="text-success">{{i.views}} views</u></i></span></strong>
+          <h3 class="mb-0 text-success">{{i.title}} </h3>
+          <div class="mb-1 text-muted">{{i.timestamp}}</div>
+          <p class="card-text mt-2 mb-auto">
+          <div class="preview">{{i.content|safe|truncatechars:198}}...</div>
+          </p>
+          <div class="d-flex justify-content-sm-start justify-content-around">
+            <a href="/blog/contin/{{i.sno}}/" role='button' class="btn btn-sm-sm btn-primary">Continue Reading</a>
+            <div class="fb-like " data-href="http://127.0.0.1:8000/{{i.sno}}" data-width="" data-layout="button_count"
+              data-action="like" data-size="large" data-share="true"></div>
+            <button class="btn btn-success" onclick="share()">Share</button>
+            <script>
+
+              function share() {
+                // var link = "https://meshv-p.github.io/Notes";
+                // console.log(link);
+                if (navigator.share) {
+                  navigator.share({
+                    title: 'meshv patel', url: 'https://meshv-p.github.io/Notes'
+                  })
+
+                }
+              }
+            </script>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  {% endfor %}
+</div>
+{% endblock body %}

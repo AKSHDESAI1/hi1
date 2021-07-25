@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{%block body%}
+
+<div class="container">
+
+
+    <div class="row g-5">
+        <div class="col-md-8">
+            <h3 class="pb-4 mb-4 fst-italic border-bottom">
+                {{myposts.title}}
+            </h3>
+
+
+            <img class="bd-placeholder-img img-thumbnail " width="400" height="300" src="{{myposts.image2.url}}">
+
+            <article class="blog-post">
+                <p class="blog-post-meta">{{myposts.timestamp}} by <a href="#">{{myposts.author}}</a> <span class="text-success w-50"><b>{{myposts.views}} views</b></span></p>
+
+                <h2 class="blog-post-title">{{myposts.content|safe}}</h2>
+
+
+            </article>
+        </div>
+
+
+
+
+
+
+        <div class="col-md-4  ">
+            <div class="position-sticky " style="top: 2rem">
+                <div class="p-4 mb-3 bg-light rounded ">
+                    <h4 class="fst-italic">About</h4>
+                    <p class="mb-0">iCoder Blog is an <b>amazing website.</b> You can use it with our awesome search
+                        functionality. Enjoy it...
+                    </p>
+                </div>
+                <div class="container my-3">
+
+                    <div class="fb-share-button" data-href="http://127.0.0.1:8000/blog/contin/{{myposts.sno}}/"
+                        data-layout="button_count" data-size="large"><a target="_blank"
+                            href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F127.0.0.1%3A8000%2Fblog%2Fblogpost&amp;src=sdkpreparse"
+                            class="fb-xfbml-parse-ignore">Share</a></div>
+                </div>
+
+
+                <div class="p-4">
+                    <h4 class="fst-italic">Contact Us On:-</h4>
+                    <ol class="list-unstyled">
+                        <li><a href="/contact/">Our Contact Page</a></li>
+
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+<hr class='my-3'>
+<div class="container">
+    <h2>Comments ({{a1}})</h2>
+    <div class="my-2">
+        {% if user.is_authenticated %}
+        <form action="/blog/postcomment1/" method="POST"> {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="comment_1" class="form-label"><b>Post Comment:- </b></label>
+                <input type="text" class="form-control" placeholder="Enter comment here" id="comment_1" name="comment"
+                    required>
+                <input type="hidden" name="parentsno" value=''>
+            </div>
+
+            <input type="hidden" name="postSno" value='{{myposts.sno}}'>
+
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+        {% else %}
+        <h2 class='text-warning'><b><i>Please Sign-up to Post your Comment in our website.</i></b> </h2>
+
+
+        {% endif %}
+    </div>
+    {% load humanize %}
+    {% load extras %}
+
+    {% for item in comments1|slice:'::-1' %}
+    <div class="row my-3">
+        {% load static %}
+        <div class="col-md-1 col-2 ">
+            <img class="img-thumbnail w-100 img-fluid rounded text-center m-auto ml-1 border border-primary  border-2"
+                src="/static/user1.png/" width="150px" height="150px">
+        </div>
+        <div class="col-md-11 col-10 ">
+            <b>{{item.user}} at <span class="badge bg-primary">{{item.timestamp | naturaltime}}</span></b>
+            <div> {{item}} </div>
+
+            <div class="reply">
+
+
+
+                {% if user.is_authenticated %}
+                <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#reply{{item.sno}}" aria-expanded="false" aria-controls="reply{{item.sno}}">
+                    Post a Reply
+                </button>
+                <div class="collapse" id="reply{{item.sno}}">
+                    <div class="card card-body mt-2 border border-primary border-2">
+                        <form action="/blog/postcomment1/" method="POST"> {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label for="reply_comment" class="form-label"><b>Post Comment:- </b></label>
+                                <input type="text" class="form-control" placeholder="Enter comment here"
+                                    id="reply_comment" name="comment" required>
+                                <input type="hidden" name="parentsno" value='{{item.sno}}'>
+                            </div>
+
+                            <input type="hidden" name="postSno" value='{{myposts.sno}}'>
+
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </form>
+                    </div>
+                </div>
+                {% else %}
+                <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#reply{{item.sno}}" aria-expanded="false" aria-controls="reply{{item.sno}}"
+                    disabled>
+                    Login to Reply
+                </button>
+
+                {% endif %}
+                <div class="replies my-2">
+                    {% for x in repDict|get_val:item.sno|slice:"::-1" %}
+                    <div class="row my-2">
+                        <div class="col-md-1 col-2 ">
+                            <img class="img-thumbnail w-100 img-fluid rounded text-center m-auto ml-1 border border-success  border-2"
+                                src="/static/user1.png/" width="150px" height="150px">
+                        </div>
+                        {% load humanize %}
+                        <div class="col-md-11 col-10 ">
+                            <b>{{x.user}} at <span class="badge bg-primary">{{x.timestamp|naturaltime}}</span></b>
+                            <div> {{x}} </div>
+
+                        </div>
+                        <br>
+
+
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+
+    {%endblock%}

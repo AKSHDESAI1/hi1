@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %} Search Results {% endblock title %}
+<!--{% block blogactive %}active{% endblock blogactive %}-->
+{% block body %}
+<div class="container">
+  {% if  allposts100|length == 0%}
+  
+  <h1>Sorry for that .....</h1>
+  <p>No search Results</p>
+  Your search - <b>{{query}}</b> - did not match any keywords
+  <br>
+  suggestions:
+  <ul>
+      <li>
+
+          Try different keywords
+      </li>
+  </ul>
+  
+  <a href='/blog/' class='btn btn-primary btn-lg'>Go Back</a>
+  {% endif %}
+  {% if allposts100|length > 0 %}
+  <h2 class='mb-3'>Search Results By iCoder</h2>
+  {% endif %}
+  {% for i in allposts100 %}
+  <div class="row mb-2 my-2 shadow-lg">
+    <div class="col-md-12">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col-6 d-flex d-sm-block d-none align-self-center">
+
+          <img class="bd-placeholder-img"  width="55%" height="40%" src='{{i.image2.url}}'>
+
+        </div>
+        <div class="col-12 d-sm-none d-block d-flex align-self-center justify-content-center">
+
+          <img class="bd-placeholder-img"  width="100%" height="95%" src='{{i.image2.url}}'>
+        </div>
+        <div class="col-sm-6 col-12 text-center text-sm-start p-4 jusify-content-end d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-primary">{{i.author}}</strong>
+          <h3 class="mb-0 text-success">{{i.title}}</h3>
+          <div class="mb-1 text-muted">{{i.timestamp}}</div>
+          <p class="card-text mt-2 mb-auto">{{i.content| truncatechars:198}}...</p>
+          <div>
+            <a href="/blog/blogpost1.html" role='button' class="btn btn-primary">Continue Reading</a>
+            <div class="fb-like m-4" data-href="http://127.0.0.1:8000/{{i.sno}}" data-width=""
+              data-layout="button_count" data-action="like" data-size="large" data-share="true"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  {% endfor %}
+</div>
+{% endblock body %}
